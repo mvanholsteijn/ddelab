@@ -5,6 +5,8 @@ zone and 1 bastion host.
 
 Two dummy instances are created for test purposes.
 
+This script will only work for the domain dutchdevops.net.
+
 Prerequisites
 --------------
 You need to have:
@@ -13,6 +15,7 @@ You need to have:
 - jq               (brew install jq)
 - jinja2           (sudo pip install jinja2)
 - Power user and IAM privileges on your AWS account
+- a route53 zone .dutchdevops.net.
 
 
 INSTALL
