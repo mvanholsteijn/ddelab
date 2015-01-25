@@ -186,6 +186,7 @@
           "Timeout": "2",
           "UnhealthyThreshold": "2"
         },
+{% if options.with_test_instances %}
         "Instances": [
           {
             "Ref": "TestInstanceAZ1"
@@ -194,6 +195,7 @@
             "Ref": "TestInstanceAZ2"
           }
         ],
+{% endif %}
         "SecurityGroups": [
           {
             "Ref": "sgstudent1loadbalancersg"
@@ -346,6 +348,7 @@
         ]
       }
     },
+{% if options.with_test_instances %}
     "TestInstanceAZ2": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
@@ -420,6 +423,7 @@
         ]
       }
     },
+{% endif %}
     "sgstudent1natsg": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
@@ -899,5 +903,5 @@
       }
     }
   },
-  "Description": { "Fn::Join" : [ "", [ "Base VPC for the Dutch DevOps Engineers HA play ground of ", { "Ref" : "KeyName" } ] ] }
+  "Description": "Base VPC for the Dutch DevOps Engineers HA playground."
 }
