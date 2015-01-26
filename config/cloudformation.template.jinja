@@ -10,11 +10,105 @@
     "SSLCertificateId" : {
       "Description" : "SSL Certificate Id to be used for SSL traffic",
       "Type" : "String"
+    },
+    "NatInstanceType" : {
+      "Description" : "Instance type of NAT hosts",
+      "Type" : "String",
+      "Default" : "t2.micro"
+    },
+    "BastionInstanceType" : {
+      "Description" : "Instance type of Bastion hosts",
+      "Type" : "String",
+      "Default" : "t2.micro"
+    },
+    "StackatoInstanceType" : {
+      "Description" : "Instance type of Stackato hosts",
+      "Type" : "String",
+      "Default" : "m3.medium"
     }
   },
+
+  "Mappings" : {
+    "AvailabilityZones" : {
+        "eu-west-1"     : { "Zone1" : "eu-west-1a", "Zone2" : "eu-west-1b" },
+        "eu-central-1"  : { "Zone1" : "eu-central-1a", "Zone2" : "eu-central-1b" }
+    },
+
+    "AWSInstanceType2Arch" : {
+      "t1.micro"    : { "Arch" : "PV64"   },
+      "t2.micro"    : { "Arch" : "HVM64"  },
+      "t2.small"    : { "Arch" : "HVM64"  },
+      "t2.medium"   : { "Arch" : "HVM64"  },
+      "m1.small"    : { "Arch" : "PV64"   },
+      "m1.medium"   : { "Arch" : "PV64"   },
+      "m1.large"    : { "Arch" : "PV64"   },
+      "m1.xlarge"   : { "Arch" : "PV64"   },
+      "m2.xlarge"   : { "Arch" : "PV64"   },
+      "m2.2xlarge"  : { "Arch" : "PV64"   },
+      "m2.4xlarge"  : { "Arch" : "PV64"   },
+      "m3.medium"   : { "Arch" : "HVM64"  },
+      "m3.large"    : { "Arch" : "HVM64"  },
+      "m3.xlarge"   : { "Arch" : "HVM64"  },
+      "m3.2xlarge"  : { "Arch" : "HVM64"  },
+      "c1.medium"   : { "Arch" : "PV64"   },
+      "c1.xlarge"   : { "Arch" : "PV64"   },
+      "c3.large"    : { "Arch" : "HVM64"  },
+      "c3.xlarge"   : { "Arch" : "HVM64"  },
+      "c3.2xlarge"  : { "Arch" : "HVM64"  },
+      "c3.4xlarge"  : { "Arch" : "HVM64"  },
+      "c3.8xlarge"  : { "Arch" : "HVM64"  },
+      "g2.2xlarge"  : { "Arch" : "HVMG2"  },
+      "r3.large"    : { "Arch" : "HVM64"  },
+      "r3.xlarge"   : { "Arch" : "HVM64"  },
+      "r3.2xlarge"  : { "Arch" : "HVM64"  },
+      "r3.4xlarge"  : { "Arch" : "HVM64"  },
+      "r3.8xlarge"  : { "Arch" : "HVM64"  },
+      "i2.xlarge"   : { "Arch" : "HVM64"  },
+      "i2.2xlarge"  : { "Arch" : "HVM64"  },
+      "i2.4xlarge"  : { "Arch" : "HVM64"  },
+      "i2.8xlarge"  : { "Arch" : "HVM64"  },
+      "hi1.4xlarge" : { "Arch" : "HVM64"  },
+      "hs1.8xlarge" : { "Arch" : "HVM64"  },
+      "cr1.8xlarge" : { "Arch" : "HVM64"  },
+      "cc2.8xlarge" : { "Arch" : "HVM64"  }
+    },
+
+    "AWSRegionNatAMI" : {
+	"ap-northeast-1" : { "HVM64" :  "ami-55c29e54" },
+	"ap-southeast-2" : { "HVM64" :  "ami-996402a3" },
+	"eu-central-1" : { "HVM64" :  "ami-204c7a3d" },
+	"eu-west-1" : { "HVM64" :  "ami-3760b040" },
+	"sa-east-1" : { "HVM64" :  "ami-b972dba4" },
+	"us-east-1" : { "HVM64" :  "ami-4c9e4b24" },
+	"us-west-1" : { "HVM64" :  "ami-2b2b296e" },
+	"us-west-2" : { "HVM64" :  "ami-bb69128b" }
+    },
+
+    "AWSRegionBastionAMI" : {
+	"ap-northeast-1" : { "HVM64" :  "ami-4985b048"},
+	"ap-southeast-1" : { "HVM64" :  "ami-ac5c7afe"},
+	"ap-southeast-2" : { "HVM64" :  "ami-63f79559"},
+	"eu-central-1" : { "HVM64" :  "ami-b43503a9"},
+	"eu-west-1" : { "HVM64" :  "ami-6e7bd919"},
+	"sa-east-1" : { "HVM64" :  "ami-8737829a"},
+	"us-east-1" : { "HVM64" :  "ami-b66ed3de"},
+	"us-west-1" : { "HVM64" :  "ami-4b6f650e"},
+	"us-west-2" : { "HVM64" :  "ami-b5a7ea85"}
+    },
+
+    "AWSRegionStackatoAMI" : {
+	"ap-southeast-1" :	{ "HVM64" : "ami-97ffd0c5" },
+	"ap-southeast-2" :	{ "HVM64" : "ami-d53e55ef" },
+	"eu-central-1" :	{ "HVM64" : "ami-74dded69" },
+	"eu-west-1" :	{ "HVM64" : "ami-221ca555" },
+	"us-east-1" :	{ "HVM64" : "ami-429dff2a" },
+	"us-west-2" :	{ "HVM64" : "ami-9b7b2bab" }
+    }
+  },
+
   "Resources": {
-    "vpc44ec042d": {
-      "Type": "AWS::EC2::VPC",
+    "DutchDevopsVPC": {
+    "Type": "AWS::EC2::VPC",
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "InstanceTenancy": "default",
@@ -32,9 +126,9 @@
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "CidrBlock": "10.0.1.0/24",
-        "AvailabilityZone": "eu-central-1a",
+        "AvailabilityZone":   { "Fn::FindInMap" : [ "AvailabilityZones", { "Ref" : "AWS::Region" }, "Zone1" ] },
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "Tags": [
           {
@@ -48,9 +142,9 @@
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "CidrBlock": "10.0.2.0/24",
-        "AvailabilityZone": "eu-central-1b",
+        "AvailabilityZone":   { "Fn::FindInMap" : [ "AvailabilityZones", { "Ref" : "AWS::Region" }, "Zone2" ] },
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "Tags": [
           {
@@ -60,13 +154,13 @@
         ]
       }
     },
-    "subnet4ddb1f24": {
+    "PrivateSubnetAZ1": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "CidrBlock": "10.0.3.0/24",
-        "AvailabilityZone": "eu-central-1a",
+        "AvailabilityZone":   { "Fn::FindInMap" : [ "AvailabilityZones", { "Ref" : "AWS::Region" }, "Zone1" ] },
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "Tags": [
           {
@@ -76,13 +170,13 @@
         ]
       }
     },
-    "subnet50a5422b": {
+    "PrivateSubnetAZ2": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "CidrBlock": "10.0.4.0/24",
-        "AvailabilityZone": "eu-central-1b",
+        "AvailabilityZone":   { "Fn::FindInMap" : [ "AvailabilityZones", { "Ref" : "AWS::Region" }, "Zone2" ] },
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "Tags": [
           {
@@ -92,7 +186,7 @@
         ]
       }
     },
-    "igwf51ff59c": {
+    "InternetGateway": {
       "Type": "AWS::EC2::InternetGateway",
       "Properties": {
         "Tags": [
@@ -103,7 +197,7 @@
         ]
       }
     },
-    "dopt99a641f0": {
+    "DHPOptions": {
       "Type": "AWS::EC2::DHCPOptions",
       "Properties": {
         "DomainName": "eu-central-1.compute.internal",
@@ -112,11 +206,11 @@
         ]
       }
     },
-    "acl7b639012": {
+    "DutchDevopsNetworkACL": {
       "Type": "AWS::EC2::NetworkAcl",
       "Properties": {
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "Tags": [
           {
@@ -130,7 +224,7 @@
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "Tags": [
           {
@@ -144,7 +238,7 @@
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "Tags": [
           {
@@ -158,7 +252,7 @@
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "Tags": [
           {
@@ -229,16 +323,17 @@
       "Properties": {
         "Domain": "vpc",
         "InstanceId": {
-          "Ref": "instanceid67f0418"
+          "Ref": "BastionHost"
         }
       }
     },
-    "instanceid67f0418": {
+    "BastionHost": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "DisableApiTermination": "FALSE",
-        "ImageId": "ami-b43503a9",
-        "InstanceType": "t2.micro",
+	"ImageId" : { "Fn::FindInMap" : [ "AWSRegionBastionAMI", { "Ref" : "AWS::Region" },
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "BastionInstanceType" }, "Arch" ] } ] },
+        "InstanceType": { "Ref" : "BastionInstanceType" },
         "KeyName": { "Ref" : "KeyName" },
         "Monitoring": "false",
         "Tags": [
@@ -270,12 +365,13 @@
         ]
       }
     },
-    "instanceib56f147b": {
+    "NatInstanceAZ1": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "DisableApiTermination": "FALSE",
-        "ImageId": "ami-204c7a3d",
-        "InstanceType": "t2.micro",
+	"ImageId" : { "Fn::FindInMap" : [ "AWSRegionNatAMI", { "Ref" : "AWS::Region" },
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "NatInstanceType" }, "Arch" ] } ] },
+        "InstanceType": { "Ref" : "NatInstanceType" },
         "KeyName": { "Ref" : "KeyName" },
         "Monitoring": false,
 	"SourceDestCheck" : false,
@@ -309,12 +405,13 @@
         ]
       }
     },
-    "instancei9eb7665f": {
+    "NatInstanceAZ2": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "DisableApiTermination": "FALSE",
-        "ImageId": "ami-204c7a3d",
-        "InstanceType": "t2.micro",
+	"ImageId" : { "Fn::FindInMap" : [ "AWSRegionNatAMI", { "Ref" : "AWS::Region" },
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "NatInstanceType" }, "Arch" ] } ] },
+        "InstanceType": { "Ref" : "NatInstanceType" },
         "KeyName": { "Ref" : "KeyName" },
         "Monitoring": false,
 	"SourceDestCheck" : false,
@@ -353,8 +450,9 @@
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "DisableApiTermination": "FALSE",
-        "ImageId": "ami-b43503a9",
-        "InstanceType": "t2.micro",
+	"ImageId" : { "Fn::FindInMap" : [ "AWSRegionBastionAMI", { "Ref" : "AWS::Region" },
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "BastionInstanceType" }, "Arch" ] } ] },
+        "InstanceType": { "Ref" : "BastionInstanceType" },
         "KeyName": { "Ref" : "KeyName" },
         "Monitoring": "false",
         "Tags": [
@@ -369,7 +467,7 @@
             "Description": "Primary network interface",
             "DeviceIndex": 0,
             "SubnetId": {
-              "Ref": "subnet50a5422b"
+              "Ref": "PrivateSubnetAZ2"
             },
             "PrivateIpAddresses": [
               {
@@ -390,8 +488,9 @@
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "DisableApiTermination": "FALSE",
-        "ImageId": "ami-b43503a9",
-        "InstanceType": "t2.micro",
+	"ImageId" : { "Fn::FindInMap" : [ "AWSRegionBastionAMI", { "Ref" : "AWS::Region" },
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "BastionInstanceType" }, "Arch" ] } ] },
+        "InstanceType": { "Ref" : "BastionInstanceType" },
         "KeyName": { "Ref" : "KeyName" },
         "Monitoring": "false",
         "Tags": [
@@ -406,7 +505,7 @@
             "Description": "Primary network interface",
             "DeviceIndex": 0,
             "SubnetId": {
-              "Ref": "subnet4ddb1f24"
+              "Ref": "PrivateSubnetAZ1"
             },
             "PrivateIpAddresses": [
               {
@@ -429,7 +528,7 @@
       "Properties": {
         "GroupDescription": { "Fn::Join" : [ "", [ { "Ref" : "KeyName" } , " NAT security group" ] ] },
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "SecurityGroupIngress": [
           {
@@ -458,7 +557,7 @@
       "Properties": {
         "GroupDescription": { "Fn::Join" : [ "", [ { "Ref" : "KeyName" } , " load balancer security group" ] ] },
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "SecurityGroupIngress": [
           {
@@ -487,7 +586,7 @@
       "Properties": {
         "GroupDescription": { "Fn::Join" : [ "", [ { "Ref" : "KeyName" } , " test instance security group" ] ] },
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "SecurityGroupIngress": [
           {
@@ -508,7 +607,7 @@
       "Properties": {
         "GroupDescription": { "Fn::Join" : [ "", [ { "Ref" : "KeyName" } , " bastion host security group" ] ] },
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "SecurityGroupIngress": [
           {
@@ -535,7 +634,7 @@
         "RuleAction": "allow",
         "RuleNumber": "104",
         "NetworkAclId": {
-          "Ref": "acl7b639012"
+          "Ref": "DutchDevopsNetworkACL"
         }
       }
     },
@@ -547,7 +646,7 @@
         "RuleAction": "allow",
         "RuleNumber": "100",
         "NetworkAclId": {
-          "Ref": "acl7b639012"
+          "Ref": "DutchDevopsNetworkACL"
         }
       }
     },
@@ -559,7 +658,7 @@
         "RuleAction": "allow",
         "RuleNumber": "101",
         "NetworkAclId": {
-          "Ref": "acl7b639012"
+          "Ref": "DutchDevopsNetworkACL"
         }
       }
     },
@@ -571,7 +670,7 @@
         "RuleAction": "allow",
         "RuleNumber": "102",
         "NetworkAclId": {
-          "Ref": "acl7b639012"
+          "Ref": "DutchDevopsNetworkACL"
         }
       }
     },
@@ -583,7 +682,7 @@
         "RuleAction": "allow",
         "RuleNumber": "103",
         "NetworkAclId": {
-          "Ref": "acl7b639012"
+          "Ref": "DutchDevopsNetworkACL"
         }
       }
     },
@@ -599,7 +698,7 @@
           "To": "65535"
         },
         "NetworkAclId": {
-          "Ref": "acl7b639012"
+          "Ref": "DutchDevopsNetworkACL"
         }
       }
     },
@@ -611,7 +710,7 @@
         "RuleAction": "allow",
         "RuleNumber": "120",
         "NetworkAclId": {
-          "Ref": "acl7b639012"
+          "Ref": "DutchDevopsNetworkACL"
         }
       }
     },
@@ -619,10 +718,10 @@
       "Type": "AWS::EC2::SubnetNetworkAclAssociation",
       "Properties": {
         "NetworkAclId": {
-          "Ref": "acl7b639012"
+          "Ref": "DutchDevopsNetworkACL"
         },
         "SubnetId": {
-          "Ref": "subnet50a5422b"
+          "Ref": "PrivateSubnetAZ2"
         }
       }
     },
@@ -630,10 +729,10 @@
       "Type": "AWS::EC2::VPCGatewayAttachment",
       "Properties": {
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "InternetGatewayId": {
-          "Ref": "igwf51ff59c"
+          "Ref": "InternetGateway"
         }
       }
     },
@@ -666,7 +765,7 @@
           "Ref": "rtb1f47b476"
         },
         "SubnetId": {
-          "Ref": "subnet50a5422b"
+          "Ref": "PrivateSubnetAZ2"
         }
       }
     },
@@ -677,7 +776,7 @@
           "Ref": "rtb135ba87a"
         },
         "SubnetId": {
-          "Ref": "subnet4ddb1f24"
+          "Ref": "PrivateSubnetAZ1"
         }
       }
     },
@@ -689,7 +788,7 @@
           "Ref": "rtb3a5ba853"
         },
         "GatewayId": {
-          "Ref": "igwf51ff59c"
+          "Ref": "InternetGateway"
         }
       },
       "DependsOn": "gw1"
@@ -702,7 +801,7 @@
           "Ref": "rtb1f47b476"
         },
         "InstanceId": {
-          "Ref": "instancei9eb7665f"
+          "Ref": "NatInstanceAZ2"
         }
       }
     },
@@ -714,7 +813,7 @@
           "Ref": "rtb135ba87a"
         },
         "InstanceId": {
-          "Ref": "instanceib56f147b"
+          "Ref": "NatInstanceAZ1"
         }
       }
     },
@@ -722,10 +821,10 @@
       "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
       "Properties": {
         "VpcId": {
-          "Ref": "vpc44ec042d"
+          "Ref": "DutchDevopsVPC"
         },
         "DhcpOptionsId": {
-          "Ref": "dopt99a641f0"
+          "Ref": "DHPOptions"
         }
       }
     },
