@@ -299,18 +299,29 @@
           {
             "InstancePort": "80",
             "LoadBalancerPort": "80",
+{% if options.use_http_protocol_on_elb %}
             "Protocol": "HTTP",
             "InstanceProtocol": "HTTP"
+{% else %}
+            "Protocol": "TCP",
+            "InstanceProtocol": "TCP"
+{% endif %}
           },
           {
-            "InstancePort": "80",
             "LoadBalancerPort": "443",
+{% if options.use_http_protocol_on_elb %}
+            "InstancePort": "80",
             "Protocol": "HTTPS",
-            "InstanceProtocol": "HTTP",
+            "InstanceProtocol": "HTTP"
             "SSLCertificateId": { "Ref", "SSLCertificateId" },
             "PolicyNames": [
                "ELBSecurityPolicy-2014-10"
             ]
+{% else %}
+            "InstancePort": "443",
+            "Protocol": "TCP",
+            "InstanceProtocol": "TCP"
+{% endif %}
           }
         ]
       }

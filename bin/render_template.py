@@ -8,6 +8,9 @@ parser.add_option("-t", "--template", dest="template", default="./config/cloudfo
 parser.add_option("-w", "--with-test-instances",
                   action="store_true", dest="with_test_instances", default=False,
                   help="generate with test instances in availability zones")
+parser.add_option("-e", "--use-http-protocol-on-elb",
+                  action="store_true", dest="use_http_protocol_on_elb", default=False,
+                  help="use HTTP protocol on ELB, instead of TCP")
 
 (options, args) = parser.parse_args()
 env = Environment(loader=FileSystemLoader(os.path.dirname(options.template)))
