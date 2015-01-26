@@ -307,7 +307,7 @@
             "LoadBalancerPort": "443",
             "Protocol": "HTTPS",
             "InstanceProtocol": "HTTP",
-            "SSLCertificateId": "arn:aws:iam::233211978703:server-certificate/xita.xebia.dynamic-dns.net",
+            "SSLCertificateId": { "Ref", "SSLCertificateId" },
             "PolicyNames": [
                "ELBSecurityPolicy-2014-10"
             ]
