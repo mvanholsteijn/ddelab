@@ -297,6 +297,12 @@
         ],
         "Listeners": [
           {
+            "InstancePort": "22",
+            "LoadBalancerPort": "2222",
+            "Protocol": "TCP",
+            "InstanceProtocol": "TCP"
+          },
+          {
             "InstancePort": "80",
             "LoadBalancerPort": "80",
 {% if options.use_http_protocol_on_elb %}
