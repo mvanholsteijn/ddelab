@@ -588,6 +588,12 @@
             "FromPort": "443",
             "ToPort": "443",
             "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "2222",
+            "ToPort": "2222",
+            "CidrIp": "0.0.0.0/0"
           }
         ],
         "SecurityGroupEgress": [
@@ -905,6 +911,18 @@
         "IpProtocol": "tcp",
         "FromPort": "443",
         "ToPort": "443",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "ingress5a": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgstudent1loadbalancersg"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "2222",
+        "ToPort": "2222",
         "CidrIp": "0.0.0.0/0"
       }
     },
